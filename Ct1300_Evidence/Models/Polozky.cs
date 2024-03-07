@@ -2,13 +2,17 @@
 {
     public class Polozky
     {
-		private DateOnly datum;
-
-		public DateOnly Datum
+		public Polozky() 
 		{
-			get { return datum; }
-			set { datum = value; }
-		}
+            Datum = DateOnly.FromDateTime(DateTime.Now);
+        }
+        public Polozky(DateOnly datum, double naklady, double vynosy)
+        {
+			Datum = datum;
+			Naklady = naklady;
+			Vynosy = vynosy;
+        }
+        public DateOnly Datum { get; set; }// = DateOnly.FromDateTime(DateTime.Now);
 
 		private double naklady;
 

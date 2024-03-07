@@ -5,10 +5,10 @@
 <h1>Evidence!</h1>
 
 <div class="p-2 my-3 border">
-    <label>Datum: <input type="date"/></label>
-    <label>Nákladu: <input type="number" /></label>
-    <label>Výnosy: <input type="number" /></label>
-    <button>Přidat</button>
+    <label>Datum: <input type="date" @bind-value="Evid.Polozka.Datum" /></label>
+    <label>Nákladu: <input type="number" @bind-value="Evid.Polozka.Naklady" /></label>
+    <label>Výnosy: <input type="number" @bind-value="Evid.Polozka.Vynosy" /></label>
+    <button @onclick ="Evid.Pridat">Přidat</button>
 </div>
 <div class="p-2 my-3 border">
     <button>Zobraz vše</button>
@@ -19,5 +19,5 @@
     <p></p>
 </div>
 @code {
-
+    private Ct1300_Evidence.Models.Evidence Evid { get; set; } = new Ct1300_Evidence.Models.Evidence();
 }
