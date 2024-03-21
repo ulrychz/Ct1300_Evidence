@@ -11,12 +11,12 @@
     <button @onclick ="Evid.Pridat">Přidat</button>
 </div>
 <div class="p-2 my-3 border">
-    <button>Zobraz vše</button>
-    <button>Počet záznamů</button>
+    <button @onclick="Evid.ZobrazitZaznamy">Zobraz vše</button>
+    <button @onclick="Evid.ZobrazPocetZaznamu">Počet záznamů</button>
     <button>Statistiky</button>
 </div>
 <div class="p-2 my-3 border">
-    <p></p>
+    <p>@Evid.Vypis</p>
 </div>
 @code {
     private Ct1300_Evidence.Models.Evidence Evid { get; set; } = new Ct1300_Evidence.Models.Evidence();
