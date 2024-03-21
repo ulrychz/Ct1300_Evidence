@@ -1,4 +1,5 @@
-﻿@page "/evidence"
+﻿@inject IJSRuntime JS
+@page "/evidence"
 
 <PageTitle>Evidence</PageTitle>
 
@@ -8,16 +9,71 @@
     <label>Datum: <input type="date" @bind-value="Evid.Polozka.Datum" /></label>
     <label>Nákladu: <input type="number" @bind-value="Evid.Polozka.Naklady" /></label>
     <label>Výnosy: <input type="number" @bind-value="Evid.Polozka.Vynosy" /></label>
-    <button @onclick ="Evid.Pridat">Přidat</button>
+    @if (Evid.IsEditace)
+    {
+        <button @onclick="Evid.UkonciEditaci">Ukonči editaci</button>
+    }
+    else
+    {
+        <button @onclick ="Evid.Pridat">Přidat</button>
+    }
 </div>
 <div class="p-2 my-3 border">
     <button @onclick="Evid.ZobrazitZaznamy">Zobraz vše</button>
     <button @onclick="Evid.ZobrazPocetZaznamu">Počet záznamů</button>
-    <button>Statistiky</button>
+    <button @onclick="Evid.ZobrazStatistiky">Statistiky</button>
 </div>
 <div class="p-2 my-3 border">
-    <p>@Evid.Vypis</p>
+    <p>@((MarkupString)Evid.Vypis)</p>
 </div>
+@if (!Evid.Polozky.Any())
+{
+    <p><em>Nejsou zatím žádné záznamy</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Datum</th>
+                <th>Náklady</th>
+                <th>Výnosy</th>
+                <th>Zisk</th>
+                <th>Smazat</th>
+                <th>Edituj</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Evid.Polozky)
+            {
+                <tr>
+                    <td>@item.Datum</td>
+                    <td>@item.Naklady</td>
+                    <td>@item.Vynosy</td>
+                    <td>@item.Zisk</td>
+                    <td>
+                        <button @onclick="()=>OdstranPolozku(item)" class="text-danger">&times;</button>
+                    </td>
+                    <td>
+                        <button @onclick="()=>Evid.Editace(item)" class="text-info">&plusmn;</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
 @code {
     private Ct1300_Evidence.Models.Evidence Evid { get; set; } = new Ct1300_Evidence.Models.Evidence();
+
+    private async Task OdstranPolozku(Models.Polozky polozka)
+    {
+        var zprava = $" Chcete odebrat: Datum: {polozka.Datum} - Zisk: {polozka.Zisk} z vašeho seznamu?";
+        //JS.InvokeVoidAsync("alert", zprava);
+        if (await JS.InvokeAsync<bool>("confirm",zprava))
+        {
+            Evid.Polozky.Remove(polozka);
+        }
+    }
 }
